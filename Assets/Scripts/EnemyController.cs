@@ -28,7 +28,6 @@ public class EnemyController : MonoBehaviour
 
     [Header("Behavior Weights")]
     [Range(0, 1)] public float chasePlayerChance = 0.5f;
-    [Range(0, 1)] public float chaseTreeChance = 0.3f;
     private bool isAttacking;
     private Rigidbody rb;
     private EnemyState state;
@@ -167,6 +166,11 @@ public class EnemyController : MonoBehaviour
     // ---------------- MOVE ----------------
     void Move(Vector3 dir)
     {
+        // ✅ поворот ВСЕГДА работает
+        if (dir != Vector3.zero)
+            transform.rotation = Quaternion.LookRotation(dir);
+
+        // ✅ во время атаки только стопаем движение
         if (isAttacking)
         {
             rb.linearVelocity = Vector3.zero;
@@ -178,9 +182,6 @@ public class EnemyController : MonoBehaviour
 
         Vector3 velocity = dir * moveSpeed;
         rb.linearVelocity = new Vector3(velocity.x, 0, velocity.z);
-
-        if (dir != Vector3.zero)
-            transform.rotation = Quaternion.LookRotation(dir);
     }
     void OnTriggerEnter(Collider other)
     {

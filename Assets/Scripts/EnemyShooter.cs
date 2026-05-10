@@ -64,7 +64,7 @@ public class EnemyShooter : MonoBehaviour
     void StartAttack()
     {
         isAttacking = true;
-        attackFailSafeTimer = 2f; // чуть больше длины анимации
+        attackFailSafeTimer = 1.5f; // чуть больше длины анимации
 
         controller.StartAttacking(); // стоп движения
         anim.SetTrigger("Attack");
@@ -75,9 +75,19 @@ public class EnemyShooter : MonoBehaviour
     // 👉 ВЫЗЫВАЕТСЯ ИЗ ANIMATION EVENT
     public void Shoot()
     {
-        if (bulletPrefab != null && shootPoint != null)
+        if (bulletPrefab != null && shootPoint != null && player != null)
         {
-            Instantiate(bulletPrefab, shootPoint.position, shootPoint.rotation);
+            GameObject bullet = Instantiate(
+                bulletPrefab,
+                shootPoint.position,
+                Quaternion.identity
+            );
+
+            // 🎯 направление в игрока
+            Vector3 dir = (player.position - shootPoint.position).normalized;
+            dir.y = 0f;
+
+            bullet.transform.forward = dir;
         }
 
         // 🔊 звук

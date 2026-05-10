@@ -154,11 +154,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 580e5a8870b7ee042ad23155b289d2b0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyBullet
-  speed: 15
+  speed: 11
   lifeTime: 3
   damage: 1
   tree: {fileID: 0}
   hitVfxPrefab: {fileID: 6567708400688204068, guid: 68378ba7b6aa4fd4c8b4ee3c5da384d8, type: 3}
+  shakeDuration: 0.1
+  shakeMagnitude: 0.08
 --- !u!96 &3808931007064903225
 TrailRenderer:
   serializedVersion: 4

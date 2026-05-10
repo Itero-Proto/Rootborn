@@ -3846,8 +3846,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8dda34150ca87a64aa2daa404765cb2f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WaveSpawner
-  meleeEnemyPrefab: {fileID: 8362983807676241811, guid: 73918f65272b7c64db3f551443032bdc, type: 3}
-  shooterEnemyPrefab: {fileID: 3617003459045927350, guid: 0a0bfdd57f19e5a4ab2b1449580e3064, type: 3}
+  meleeEnemyPrefab: {fileID: 893840656811978625, guid: a7a005cc59674f14a9f009dbf63fd439, type: 3}
+  shooterEnemyPrefab: {fileID: 4009411849999226829, guid: 89885a4a7f450d64193b60834397be84, type: 3}
   spawnPoints:
   - {fileID: 525170358}
   - {fileID: 1522757777}
@@ -6192,8 +6192,8 @@ GameObject:
   - component: {fileID: 1512291682}
   - component: {fileID: 1512291687}
   - component: {fileID: 1512291689}
-  - component: {fileID: 1512291686}
   - component: {fileID: 1512291688}
+  - component: {fileID: 1512291686}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -6220,10 +6220,10 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.36206865
-  m_Height: 2.1120455
+  m_Radius: 0.54122454
+  m_Height: 1.9738541
   m_Direction: 1
-  m_Center: {x: 1.3615206e-10, y: 0.008686185, z: 0.028158665}
+  m_Center: {x: 0.03635007, y: -0.060409546, z: 0.109093904}
 --- !u!4 &1512291685
 Transform:
   m_ObjectHideFlags: 0
@@ -6232,7 +6232,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1512291681}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0.9914446, z: -0, w: 0.13052888}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0.97, y: 1.48, z: -1.54}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -6240,7 +6240,7 @@ Transform:
   - {fileID: 543450652811251787}
   - {fileID: 133457586}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: -165, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1512291686
 MonoBehaviour:
   m_ObjectHideFlags: 0

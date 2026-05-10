@@ -57,14 +57,12 @@ public class PlayerController : MonoBehaviour
             velocity.z
         );
     }
-
-    // ---------------- ROTATION (FIXED) ----------------
-
     void HandleRotation()
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
-        Plane groundPlane = new Plane(Vector3.up, Vector3.zero);
+        // 👇 плоскость на высоте игрока
+        Plane groundPlane = new Plane(Vector3.up, transform.position);
 
         if (groundPlane.Raycast(ray, out float enter))
         {
@@ -75,10 +73,7 @@ public class PlayerController : MonoBehaviour
 
             if (direction.sqrMagnitude > 0.001f)
             {
-                Quaternion targetRotation = Quaternion.LookRotation(direction);
-
-                // ❗ ВАЖНО: НЕ через Rigidbody
-                transform.rotation = Quaternion.Euler(0f, targetRotation.eulerAngles.y, 0f);
+                transform.rotation = Quaternion.LookRotation(direction);
             }
         }
     }
