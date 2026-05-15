@@ -1,11 +1,13 @@
-using UnityEngine;
+Ôªøusing UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
-
+    public PlayerController player;
+    public static System.Action OnGameEnded;
+    public static bool GameEnded;
     [Header("UI")]
     public GameObject endGamePanel;
     public GameObject gameOverPanel;
@@ -27,10 +29,9 @@ public class GameManager : MonoBehaviour
         else
             Destroy(gameObject);
 
-        // === Õ¿—“–Œ… ¿ FPS ===
-        // ŒÚÍÎ˛˜‡ÂÏ V-Sync
+        GameEnded = false;
         QualitySettings.vSyncCount = 0;
-        // Œ„‡ÌË˜Ë‚‡ÂÏ ‰Ó 60 FPS
+        // –û–≥—Ä–∞–Ω–∏—á–∏–≤–∞–µ–º –¥–æ 60 FPS
         Application.targetFrameRate = 60;
 
         audioSource = GetComponent<AudioSource>();
@@ -63,16 +64,30 @@ public class GameManager : MonoBehaviour
         if (hiddenEndPanel != null)
             hiddenEndPanel.SetActive(true);
     }
-
     public void GameOver()
     {
         if (gameEnded) return;
 
         gameEnded = true;
+        GameEnded = true;
+
+        OnGameEnded?.Invoke(); // üî• –í–ê–ñ–ù–û
+
+        if (player != null)
+            player.Die();
+
+        StartCoroutine(GameOverRoutine());
+    }
+    IEnumerator GameOverRoutine()
+    {
+        PlaySound(gameOverSound);
+
+        // üî¥ –ñ–î–Å–ú –∞–Ω–∏–º–∞—Ü–∏—é —Å–º–µ—Ä—Ç–∏
+        yield return new WaitForSecondsRealtime(2f);
+
+        yield return FadeToBlack(3f);
 
         Time.timeScale = 0f;
-
-        PlaySound(gameOverSound);
 
         if (gameOverPanel != null)
             gameOverPanel.SetActive(true);

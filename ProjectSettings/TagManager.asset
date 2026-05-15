@@ -9,6 +9,7 @@ TagManager:
   - DangerZone
   - EnemyMelee
   - EnemyShooter
+  - Ground
   layers:
   - Default
   - TransparentFX

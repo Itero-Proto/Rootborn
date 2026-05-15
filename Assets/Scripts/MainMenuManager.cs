@@ -101,7 +101,7 @@ public class MainMenuManager : MonoBehaviour
     IEnumerator StartGameWithDelay()
     {
         yield return new WaitForSecondsRealtime(0.5f);
-        SceneManager.LoadScene("GameScene");
+        SceneManager.LoadScene("Cutscene");
     }
 
     IEnumerator QuitWithDelay()

@@ -5,6 +5,7 @@ public class TreeFleshGenerator : MonoBehaviour
 {
     public List<FleshPoint> points = new List<FleshPoint>();
     public GameObject fleshPrefab;
+    public GameObject yourHealingFruitPrefab;
     [Header("Thickness")]
     public float minThickness = 0.05f;
     public float maxThickness = 0.2f;
@@ -49,7 +50,9 @@ public class TreeFleshGenerator : MonoBehaviour
             Quaternion.identity,
             transform
         );
-
+        // 👇 добавляем спавнер плода
+        FleshFruitSpawner spawner = obj.AddComponent<FleshFruitSpawner>();
+        spawner.healingFruitPrefab = yourHealingFruitPrefab;
         HangingFlesh flesh = obj.GetComponent<HangingFlesh>();
 
         // создаём конец

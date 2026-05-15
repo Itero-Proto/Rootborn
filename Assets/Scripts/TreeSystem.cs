@@ -4,8 +4,7 @@ using UnityEngine.UI;
 
 public class TreeSystem : MonoBehaviour
 {
-    [Header("UI")]
-    public Slider healthSlider;
+    private Coroutine shakeRoutine;
     private Vector3 targetScale;
     private Coroutine growRoutine;
     public AudioClip growSound;
@@ -13,13 +12,8 @@ public class TreeSystem : MonoBehaviour
     public int organic;
     public int inorganic;
     public AudioClip uvMoveSound;
-    public AudioClip takeDamageSound;
     public int level = 1;
     public int maxLevel = 15;
-
-    [Header("Health")]
-    public float maxHealth = 10f;
-    private float currentHealth;
 
     [Header("UV Movement")]
     public float uvSpeed = 1f;
@@ -28,23 +22,16 @@ public class TreeSystem : MonoBehaviour
     [Header("Visual")]
     public Renderer treeRenderer;
     public TreeFleshGenerator fleshGenerator;
-    private AudioSource uvAudioSource;
     private int lastOrganic = 0;
 
     void Start()
     {
-        currentHealth = maxHealth;
         audioSource = GetComponent<AudioSource>();
         if (treeRenderer != null)
             treeMaterial = treeRenderer.material;
 
         targetScale = transform.localScale;
 
-        if (healthSlider != null)
-        {
-            healthSlider.maxValue = maxHealth;
-            healthSlider.value = currentHealth;
-        }
     }
     void Update()
     {
@@ -58,36 +45,6 @@ public class TreeSystem : MonoBehaviour
             lastOrganic = organic;
         }
     }
-
-    // ---------------- DAMAGE ----------------
-
-    public void TakeDamage(float damage)
-    {
-        currentHealth -= damage;
-        currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
-        
-        if (takeDamageSound != null && audioSource != null)
-        {
-            audioSource.pitch = Random.Range(0.9f, 1.1f);
-            audioSource.PlayOneShot(takeDamageSound, 0.5f);
-        }
-        UpdateHealthUI();
-
-        StartCoroutine(DamagePulse());
-
-        if (currentHealth <= 0)
-        {
-            GameManager.Instance.GameOver();
-        }
-    }
-
-    void UpdateHealthUI()
-    {
-        if (healthSlider != null)
-            healthSlider.value = currentHealth;
-    }
-
-    // ---------------- DROPS ----------------
 
     public void ReceiveDrop(DropType type)
     {
@@ -104,8 +61,6 @@ public class TreeSystem : MonoBehaviour
         }
     }
 
-    // ---------------- LEVEL SYSTEM ----------------
-
     void TryLevelUp()
     {
         if (level >= maxLevel)
@@ -119,14 +74,14 @@ public class TreeSystem : MonoBehaviour
     }
     void Grow()
     {
-        // 🔊 Звук роста
         if (growSound != null)
         {
             audioSource.pitch = Random.Range(0.9f, 1.1f);
             audioSource.PlayOneShot(growSound, 1f);
         }
-        Vector3 scale = targetScale;
 
+        StartShake();
+        Vector3 scale = targetScale;
         scale.y *= 1.05f;
         scale.x *= 1.05f;
         scale.z *= 1.05f;
@@ -138,8 +93,6 @@ public class TreeSystem : MonoBehaviour
 
         growRoutine = StartCoroutine(SmoothGrow());
     }
-
-    // ---------------- VISUAL REACTIONS ----------------
 
     IEnumerator OrganicPulse()
     {
@@ -220,13 +173,41 @@ public class TreeSystem : MonoBehaviour
             yield return null;
         }
     }
-
-    IEnumerator DamagePulse()
+    public void StartShake()
     {
-        Vector3 original = transform.localScale;
+        if (shakeRoutine != null)
+        {
+            StopCoroutine(shakeRoutine);
+        }
 
-        transform.localScale = original * 0.9f;
-        yield return new WaitForSeconds(0.1f);
-        transform.localScale = original;
+        transform.localRotation = Quaternion.identity;
+
+        shakeRoutine = StartCoroutine(ShakeRoutine());
+    }
+    IEnumerator ShakeRoutine()
+    {
+        Quaternion originalRot = transform.localRotation;
+
+        float duration = 0.8f;
+        float strength = 4f;
+
+        float t = 0f;
+
+        while (t < duration)
+        {
+            t += Time.deltaTime;
+
+            float fade = 1f - (t / duration);
+
+            float angle =
+                Mathf.Sin(t * 8f) * strength * fade;
+
+            transform.localRotation =
+                originalRot * Quaternion.Euler(0f, 0f, angle);
+
+            yield return null;
+        }
+
+        transform.localRotation = originalRot;
     }
 }

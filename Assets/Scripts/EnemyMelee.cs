@@ -4,68 +4,106 @@ public class EnemyMelee : MonoBehaviour
 {
     public float damage = 1f;
     public float attackCooldown = 1f;
+
     private float timer;
+
+    private PlayerController player;
+    private TreeHealth tree;
 
     private Animator anim;
     private AudioSource audioSource;
-
-    public TreeSystem tree;
+    private EnemyController controller;
 
     [Header("Audio")]
     public AudioClip attackSound;
 
-    [Header("VFX")]
-    public GameObject hitVfxPrefab;
+    private bool isGameEnded;
 
     void Start()
     {
         anim = GetComponentInChildren<Animator>();
         audioSource = GetComponent<AudioSource>();
 
-        tree = FindAnyObjectByType<TreeSystem>();
+        player = FindAnyObjectByType<PlayerController>();
+        tree = FindAnyObjectByType<TreeHealth>();
+        controller = GetComponent<EnemyController>();
+
+        isGameEnded = false;
     }
 
     void Update()
     {
+        if (isGameEnded) return;
+
         timer -= Time.deltaTime;
     }
 
-    void Attack(Vector3 hitPoint)
+    void OnCollisionStay(Collision collision)
     {
-        anim.SetTrigger("Attack");
+        if (isGameEnded) return;
+        if (!collision.collider.CompareTag("Player")) return;
+        if (player == null) return;
 
-        // 🔊 звук атаки
+        if (timer <= 0f)
+        {
+            Attack();
+        }
+    }
+
+    void Attack()
+    {
+        if (isGameEnded) return;
+
+        if (controller != null)
+            controller.StartAttacking();
+
+        if (anim != null)
+            anim.SetTrigger("Attack");
+
         if (attackSound != null && audioSource != null)
         {
             audioSource.pitch = Random.Range(0.9f, 1.1f);
             audioSource.PlayOneShot(attackSound, 0.5f);
         }
 
-        // 💥 VFX
-        if (hitVfxPrefab != null)
-        {
-            Instantiate(hitVfxPrefab, hitPoint, Quaternion.identity);
-        }
+        timer = attackCooldown;
     }
 
     public void DealDamage()
     {
+        if (isGameEnded) return;
+
         if (tree != null)
             tree.TakeDamage(damage);
+
+        if (DamageFlash.Instance != null)
+        {
+            DamageFlash.Instance.Flash(
+                new Color(0.35f, 0f, 0.35f, 0.4f)
+            );
+        }
+
+        if (player != null)
+            player.PlayHitFeedback();
     }
 
-    void OnCollisionStay(Collision collision)
+    void OnEnable()
     {
-        if (!collision.collider.CompareTag("Player")) return;
+        GameManager.OnGameEnded += ResetAI;
+    }
 
-        if (timer <= 0f)
-        {
-            Vector3 hitPoint = collision.contacts[0].point;
+    void OnDisable()
+    {
+        GameManager.OnGameEnded -= ResetAI;
+    }
 
-            Attack(hitPoint);
-            DealDamage(); // 👈 теперь урон реально применяется
+    void ResetAI()
+    {
+        isGameEnded = true;
 
-            timer = attackCooldown;
-        }
+        timer = attackCooldown;
+
+        if (controller != null)
+            controller.EndAttacking();
     }
 }

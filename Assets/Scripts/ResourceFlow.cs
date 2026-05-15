@@ -3,15 +3,37 @@ using UnityEngine;
 public class ResourceFlow : MonoBehaviour
 {
     public UmbilicalCord cord;
-    public GameObject flowPrefab;
 
-    public void PlayFlow()
+    [Header("Flow Prefabs")]
+    public GameObject organicFlowPrefab;
+    public GameObject inorganicFlowPrefab;
+
+    public void PlayFlow(DropType type)
     {
-        GameObject obj = Instantiate(flowPrefab);
+        GameObject prefab = null;
+
+        switch (type)
+        {
+            case DropType.Organic:
+                prefab = organicFlowPrefab;
+                break;
+
+            case DropType.Inorganic:
+                prefab = inorganicFlowPrefab;
+                break;
+        }
+
+        if (prefab == null)
+            return;
+
+        GameObject obj = Instantiate(prefab);
 
         FlowOnCord flow = obj.GetComponent<FlowOnCord>();
-        flow.cord = cord;
 
-        flow.Play();
+        if (flow != null)
+        {
+            flow.cord = cord;
+            flow.Play();
+        }
     }
 }

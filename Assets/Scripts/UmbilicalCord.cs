@@ -10,7 +10,7 @@ public class UmbilicalCord : MonoBehaviour
     [Header("Length")]
     public float baseMaxDistance = 5f;
     public float currentMaxDistance;
-    public float maxSafeLength = 25f;
+    public float maxSafeLength = 15f;
     [Header("Shape")]
     public int segments = 15;
     public float waveAmplitude = 0.3f;

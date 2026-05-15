@@ -5,16 +5,10 @@ public class EnemyBullet : MonoBehaviour
     public float speed = 15f;
     public float lifeTime = 3f;
     public int damage = 1;
-
-    public TreeSystem tree;
+    public TreeHealth tree;
 
     [Header("VFX")]
     public GameObject hitVfxPrefab;
-
-    [Header("Camera Shake")]
-    public float shakeDuration = 0.08f;
-    public float shakeMagnitude = 0.08f;
-
     private Rigidbody rb;
 
     void Start()
@@ -23,7 +17,7 @@ public class EnemyBullet : MonoBehaviour
         rb.linearVelocity = transform.forward * speed;
 
         if (tree == null)
-            tree = GameObject.FindGameObjectWithTag("Tree").GetComponent<TreeSystem>();
+            tree = GameObject.FindGameObjectWithTag("Tree").GetComponent<TreeHealth>();
 
         Destroy(gameObject, lifeTime);
     }
@@ -33,26 +27,32 @@ public class EnemyBullet : MonoBehaviour
         if (tree != null)
             tree.TakeDamage(damage);
     }
-
     void OnTriggerEnter(Collider other)
     {
-        if (!other.CompareTag("Player")) return;
-
         Vector3 hitPoint = other.ClosestPoint(transform.position);
 
-        // 💥 VFX
         if (hitVfxPrefab != null)
         {
-            Instantiate(hitVfxPrefab, hitPoint, Quaternion.identity);
+            Instantiate(
+                hitVfxPrefab,
+                hitPoint,
+                Quaternion.identity
+            );
         }
 
-        // 📸 CAMERA SHAKE (вот здесь)
-        if (CameraShake.Instance != null)
+        if (other.CompareTag("Player"))
         {
-            CameraShake.Instance.Shake(shakeDuration, shakeMagnitude);
+            PlayerController player =
+                other.GetComponent<PlayerController>();
+
+            if (player != null)
+            {
+                player.PlayHitFeedback();
+            }
+
+            DealDamage();
         }
 
-        DealDamage();
         Destroy(gameObject);
     }
 }

@@ -20,8 +20,10 @@ public class EnemyShooter : MonoBehaviour
     private EnemyController controller;
     private AudioSource audioSource;
 
-    private bool isAttacking = false;
-    private float attackFailSafeTimer = 0f;
+    private bool isAttacking;
+    private float attackFailSafeTimer;
+
+    private bool isGameEnded;
 
     void Start()
     {
@@ -37,44 +39,44 @@ public class EnemyShooter : MonoBehaviour
 
     void Update()
     {
+        if (isGameEnded) return;
         if (player == null || controller == null) return;
 
         timer -= Time.deltaTime;
 
         float dist = Vector3.Distance(transform.position, player.position);
 
-        // 🔥 Запуск атаки
-        if (dist < attackRange && timer <= 0f && !isAttacking)
+        if (!isAttacking && dist < attackRange && timer <= 0f)
         {
             StartAttack();
         }
 
-        // 🔧 Fail-safe (если анимация сломалась)
         if (isAttacking)
         {
             attackFailSafeTimer -= Time.deltaTime;
 
             if (attackFailSafeTimer <= 0f)
-            {
                 EndAttack();
-            }
         }
     }
 
     void StartAttack()
     {
-        isAttacking = true;
-        attackFailSafeTimer = 1.5f; // чуть больше длины анимации
+        if (isGameEnded) return;
 
-        controller.StartAttacking(); // стоп движения
+        isAttacking = true;
+        attackFailSafeTimer = 1f;
+
+        controller.StartAttacking();
         anim.SetTrigger("Attack");
 
         timer = fireRate;
     }
 
-    // 👉 ВЫЗЫВАЕТСЯ ИЗ ANIMATION EVENT
     public void Shoot()
     {
+        if (isGameEnded) return;
+
         if (bulletPrefab != null && shootPoint != null && player != null)
         {
             GameObject bullet = Instantiate(
@@ -83,14 +85,12 @@ public class EnemyShooter : MonoBehaviour
                 Quaternion.identity
             );
 
-            // 🎯 направление в игрока
             Vector3 dir = (player.position - shootPoint.position).normalized;
             dir.y = 0f;
 
             bullet.transform.forward = dir;
         }
 
-        // 🔊 звук
         if (shootSound != null && audioSource != null)
         {
             audioSource.pitch = Random.Range(0.9f, 1.1f);
@@ -103,6 +103,28 @@ public class EnemyShooter : MonoBehaviour
     void EndAttack()
     {
         isAttacking = false;
+
+        if (controller != null)
+            controller.EndAttacking();
+    }
+
+    void OnEnable()
+    {
+        GameManager.OnGameEnded += ResetAI;
+    }
+
+    void OnDisable()
+    {
+        GameManager.OnGameEnded -= ResetAI;
+    }
+
+    void ResetAI()
+    {
+        isGameEnded = true;
+
+        isAttacking = false;
+        timer = fireRate;
+        attackFailSafeTimer = 0f;
 
         if (controller != null)
             controller.EndAttacking();

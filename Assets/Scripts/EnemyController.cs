@@ -11,10 +11,10 @@ public enum EnemyState
 public class EnemyController : MonoBehaviour
 {
     private float attackFailSafeTimer = 0f;
+    private bool hasTarget => player != null && !GameManager.GameEnded;
     private Animator anim;
     [Header("Targets")]
     public Transform player;
-    public Transform tree;
     [Header("Spawn Move")]
     public float spawnMoveDuration = 2f;
     public float spawnMoveSpeed = 4f;
@@ -49,19 +49,25 @@ public class EnemyController : MonoBehaviour
         else
             spawnTarget = transform.position + transform.forward * 3f;
     }
-
     void Update()
     {
+        if (GameManager.GameEnded)
+        {
+            isAttacking = false;
+            state = EnemyState.Wander;
+            rb.linearVelocity = Vector3.zero;
+            anim.SetFloat("Speed", 0);
+            return;
+        }
+
         if (isAttacking)
         {
             attackFailSafeTimer -= Time.deltaTime;
 
             if (attackFailSafeTimer <= 0f)
-            {
-                isAttacking = false;
-            }
+                EndAttacking();
         }
-        // 🔥 стартовое движение после спавна
+
         if (isInSpawnMove)
         {
             SpawnMove();
@@ -75,19 +81,38 @@ public class EnemyController : MonoBehaviour
                 break;
 
             case EnemyState.ChasePlayer:
+                if (!hasTarget)
+                {
+                    Wander();
+                    return;
+                }
+
                 Chase(player.position);
                 break;
         }
 
-        DecideState();
+        if (!GameManager.GameEnded)
+            DecideState();
     }
-
-
+    void ResetAI()
+    {
+        isAttacking = false;
+        state = EnemyState.Wander;
+        rb.linearVelocity = Vector3.zero;
+        anim.SetFloat("Speed", 0);
+    }
+    void OnEnable()
+    {
+        GameManager.OnGameEnded += ResetAI;
+    }
+    void OnDisable()
+    {
+        GameManager.OnGameEnded -= ResetAI;
+    }
     void FixedUpdate()
     {
         rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z);
     }
-    // ---------------- STATE ----------------
 
     void ChooseInitialState()
     {
@@ -122,14 +147,13 @@ public class EnemyController : MonoBehaviour
     }
     void DecideState()
     {
+        if (!hasTarget) return;
+
         float distPlayer = Vector3.Distance(transform.position, player.position);
 
         if (distPlayer < detectionRange)
             state = EnemyState.ChasePlayer;
     }
-
-    // ---------------- WANDER ----------------
-
     void Wander()
     {
         changeDirTimer -= Time.deltaTime;
@@ -196,10 +220,11 @@ public class EnemyController : MonoBehaviour
     }
     public void StartAttacking()
     {
-        isAttacking = true;
-        attackFailSafeTimer = 1.5f; // чуть больше длительности анимации
-    }
+        if (GameManager.GameEnded) return;
 
+        isAttacking = true;
+        attackFailSafeTimer = 1.25f;
+    }
     public void EndAttacking()
     {
         isAttacking = false;

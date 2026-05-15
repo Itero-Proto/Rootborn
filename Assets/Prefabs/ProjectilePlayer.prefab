@@ -157,6 +157,7 @@ MonoBehaviour:
   speed: 17
   lifeTime: 3
   damage: 1
+  hitVfxPrefab: {fileID: 956774377856875316, guid: 5dcd4947132b70349814f539b881d081, type: 3}
 --- !u!96 &4855097081969548508
 TrailRenderer:
   serializedVersion: 4

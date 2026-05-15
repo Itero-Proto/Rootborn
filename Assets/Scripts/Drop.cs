@@ -5,40 +5,44 @@ public class Drop : MonoBehaviour
     [Header("Core")]
     public DropType type;
     private TreeSystem tree;
+    [Header("Bounce")]
+    public float minBounceHeight = 0.1f;
+    public float maxBounceHeight = 0.4f;
 
+    public float minBounceSpeed = 2f;
+    public float maxBounceSpeed = 6f;
+
+    public float minBounceDelay = 0.5f;
+    public float maxBounceDelay = 3f;
+
+    private Vector3 startPos;
+
+    private bool isBouncing = false;
+    private float bounceTimer;
+
+    private float currentBounceHeight;
+    private float currentBounceSpeed;
+    private float bounceProgress;
     [Header("Movement")]
     public float attractDistance = 5f;
     public float moveSpeed = 8f;
 
-    [Header("Rotation")]
-    public Transform visual; // 👈 сюда можно назначить модель (лучше использовать)
-    public Vector3 minRotationSpeed = new Vector3(30f, 60f, 20f);
-    public Vector3 maxRotationSpeed = new Vector3(90f, 180f, 60f);
-    private Vector3 rotationSpeed;
-
     [Header("Audio")]
     public AudioClip pickupSound;
-
+    [Header("VFX")]
+    public GameObject organicPickupVfx;
+    public GameObject inorganicPickupVfx;
     private ResourceFlow flow;
     private Transform player;
     private bool isMovingToPlayer = false;
 
     void Start()
     {
+        startPos = transform.position;
+        SetNextBounceDelay();
         player = GameObject.FindGameObjectWithTag("Player")?.transform;
         flow = FindAnyObjectByType<ResourceFlow>();
         tree = FindAnyObjectByType<TreeSystem>();
-
-        // 🎲 случайная скорость вращения по осям
-        rotationSpeed = new Vector3(
-            Random.Range(minRotationSpeed.x, maxRotationSpeed.x),
-            Random.Range(minRotationSpeed.y, maxRotationSpeed.y),
-            Random.Range(minRotationSpeed.z, maxRotationSpeed.z)
-        );
-
-        // если visual не задан — используем сам объект
-        if (visual == null)
-            visual = transform;
     }
 
     void Update()
@@ -58,15 +62,57 @@ public class Drop : MonoBehaviour
         }
         else
         {
-            RotateIdle(); // 👈 вращение только когда лежит
+            BounceIdle();
         }
     }
-
-    void RotateIdle()
+    void BounceIdle()
     {
-        visual.Rotate(rotationSpeed * Time.deltaTime);
-    }
+        // ждём перед прыжком
+        if (!isBouncing)
+        {
+            bounceTimer -= Time.deltaTime;
 
+            if (bounceTimer <= 0f)
+            {
+                isBouncing = true;
+
+                currentBounceHeight =
+                    Random.Range(minBounceHeight, maxBounceHeight);
+
+                currentBounceSpeed =
+                    Random.Range(minBounceSpeed, maxBounceSpeed);
+
+                bounceProgress = 0f;
+            }
+
+            return;
+        }
+
+        // сам прыжок
+        bounceProgress += Time.deltaTime * currentBounceSpeed;
+
+        float y = Mathf.Sin(bounceProgress * Mathf.PI)
+                  * currentBounceHeight;
+
+        Vector3 pos = transform.position;
+        pos.y = startPos.y + y;
+        transform.position = pos;
+
+        // прыжок закончился
+        if (bounceProgress >= 1f)
+        {
+            isBouncing = false;
+
+            pos.y = startPos.y;
+            transform.position = pos;
+
+            SetNextBounceDelay();
+        }
+    }
+    void SetNextBounceDelay()
+    {
+        bounceTimer = Random.Range(minBounceDelay, maxBounceDelay);
+    }
     void MoveToPlayer()
     {
         transform.position = Vector3.MoveTowards(
@@ -75,22 +121,39 @@ public class Drop : MonoBehaviour
             moveSpeed * Time.deltaTime
         );
 
-        // 💫 можно оставить вращение даже во время полёта (выглядит круто)
-        visual.Rotate(rotationSpeed * Time.deltaTime * 1.5f);
-
         if (Vector3.Distance(transform.position, player.position) < 0.5f)
         {
             TransferToTree();
         }
     }
-
     void TransferToTree()
     {
-        if (flow != null)
+        // 💥 VFX в момент подбора
+        GameObject vfxPrefab = null;
+
+        switch (type)
         {
-            flow.PlayFlow();
+            case DropType.Organic:
+                vfxPrefab = organicPickupVfx;
+                break;
+
+            case DropType.Inorganic:
+                vfxPrefab = inorganicPickupVfx;
+                break;
         }
 
+        if (vfxPrefab != null)
+        {
+            Instantiate(vfxPrefab, transform.position, Quaternion.identity);
+        }
+
+        // 🌿 поток по кишке
+        if (flow != null)
+        {
+            flow.PlayFlow(type);
+        }
+
+        // 🌳 передача дереву
         if (tree != null)
         {
             tree.ReceiveDrop(type);

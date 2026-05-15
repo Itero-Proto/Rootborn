@@ -1,11 +1,15 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
 using System.Collections.Generic;
 
 public class UpgradeUI : MonoBehaviour
 {
     public Button[] buttons;
+
+    [Header("Icons")]
+    public Sprite speedIcon;
+    public Sprite cordIcon;
+    public Sprite fireRateIcon;
 
     private UpgradeManager manager;
 
@@ -17,21 +21,29 @@ public class UpgradeUI : MonoBehaviour
         {
             UpgradeType type = upgrades[i];
 
-            buttons[i].GetComponentInChildren<TMP_Text>().text = GetName(type);
+            Image icon = buttons[i].GetComponentInChildren<Image>();
+
+            icon.sprite = GetIcon(type);
 
             buttons[i].onClick.RemoveAllListeners();
             buttons[i].onClick.AddListener(() => manager.ChooseUpgrade(type));
         }
     }
 
-    string GetName(UpgradeType type)
+    Sprite GetIcon(UpgradeType type)
     {
         switch (type)
         {
-            case UpgradeType.MoveSpeed: return "Speed +1";
-            case UpgradeType.UmbilicalLength: return "Cord Length +1";
-            case UpgradeType.FireRate: return "Fire Rate +";
+            case UpgradeType.MoveSpeed:
+                return speedIcon;
+
+            case UpgradeType.UmbilicalLength:
+                return cordIcon;
+
+            case UpgradeType.FireRate:
+                return fireRateIcon;
         }
-        return "";
+
+        return null;
     }
 }

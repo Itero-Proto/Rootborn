@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class UIManager : MonoBehaviour
@@ -10,7 +10,7 @@ public class UIManager : MonoBehaviour
 
     void Update()
     {
-        // ESC = toggle �����
+        // ESC = toggle пауза
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             if (isPaused)
@@ -40,6 +40,8 @@ public class UIManager : MonoBehaviour
     public void RestartGame()
     {
         Time.timeScale = 1f;
+
+        GameManager.GameEnded = false; // 🔥 ВАЖНО
 
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }

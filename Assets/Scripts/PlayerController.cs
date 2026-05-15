@@ -5,23 +5,34 @@ using UnityEngine.EventSystems;
 public class PlayerController : MonoBehaviour
 {
     public bool inputBlocked;
+    public float deathAnimationTime = 2f;
+    [Header("VFX")]
+    public GameObject hitVfxPrefab;
     [Header("Movement")]
     public float moveSpeed = 5f;
     public UmbilicalCord cord;
+
     [Header("Shooting")]
     public GameObject bulletPrefab;
     public Transform shootPoint;
     public float fireRate = 0.3f;
     public AudioClip shootSound;
+
     private AudioSource audioSource;
     private Rigidbody rb;
     private Vector3 movement;
     private float fireTimer;
+    private Animator anim;
+
+    [Header("Camera Shake")]
+    public float shakeDuration = 0.15f;
+    public float shakeMagnitude = 0.15f;
 
     void Start()
     {
         rb = GetComponent<Rigidbody>();
         audioSource = GetComponent<AudioSource>();
+        anim = GetComponentInChildren<Animator>();
     }
 
     void Update()
@@ -51,17 +62,21 @@ public class PlayerController : MonoBehaviour
     {
         Vector3 velocity = movement * moveSpeed;
 
+        anim.SetFloat("Speed", movement.magnitude);
+
         rb.linearVelocity = new Vector3(
             velocity.x,
             0f,
             velocity.z
         );
     }
+
+    // ---------------- ROTATION ----------------
+
     void HandleRotation()
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
-        // 👇 плоскость на высоте игрока
         Plane groundPlane = new Plane(Vector3.up, transform.position);
 
         if (groundPlane.Raycast(ray, out float enter))
@@ -77,6 +92,9 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
+
+    // ---------------- SHOOTING ----------------
+
     void HandleShooting()
     {
         if (inputBlocked) return;
@@ -85,14 +103,17 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetMouseButton(0) && fireTimer <= 0f)
         {
-            Shoot();
+            anim.SetTrigger("Shoot");
+
             fireTimer = fireRate;
         }
     }
-    void Shoot()
+
+    // 👇 ЭТО ВЫЗЫВАЕТ Animation Event
+    public void Shoot()
     {
         Instantiate(bulletPrefab, shootPoint.position, shootPoint.rotation);
-        // 🔊 Звук выстрела
+
         if (shootSound != null)
         {
             audioSource.pitch = Random.Range(0.9f, 1.1f);
@@ -101,6 +122,7 @@ public class PlayerController : MonoBehaviour
     }
 
     // ---------------- LIMIT DISTANCE ----------------
+
     void ClampDistance()
     {
         if (cord == null) return;
@@ -109,8 +131,52 @@ public class PlayerController : MonoBehaviour
 
         if (offset.magnitude > cord.currentMaxDistance)
         {
-            Vector3 clampedPos = cord.tree.position + offset.normalized * cord.currentMaxDistance;
+            Vector3 clampedPos =
+                cord.tree.position +
+                offset.normalized * cord.currentMaxDistance;
+
             rb.MovePosition(clampedPos);
+        }
+    }
+
+    public void PlayHitFeedback()
+    {
+        if (anim != null)
+        {
+            anim.SetTrigger("Hit");
+        }
+        if (hitVfxPrefab != null)
+        {
+            Instantiate(
+                hitVfxPrefab,
+                transform.position,
+                Quaternion.identity
+            );
+        }
+        if (CameraShake.Instance != null)
+        {
+            CameraShake.Instance.Shake(
+                shakeDuration,
+                shakeMagnitude
+            );
+        }
+
+        if (DamageFlash.Instance != null)
+        {
+            DamageFlash.Instance.Flash(
+                new Color(0.35f, 0f, 0.35f, 0.4f)
+            );
+        }
+    }
+    public void Die()
+    {
+        inputBlocked = true;
+
+        rb.linearVelocity = Vector3.zero;
+
+        if (anim != null)
+        {
+            anim.SetTrigger("Die");
         }
     }
 }

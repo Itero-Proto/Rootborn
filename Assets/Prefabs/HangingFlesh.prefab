@@ -42,6 +42,7 @@ GameObject:
   - component: {fileID: 8059476877572559087}
   - component: {fileID: 7370825641068783091}
   - component: {fileID: 7123581853056960495}
+  - component: {fileID: 7882419934339761861}
   m_Layer: 0
   m_Name: HangingFlesh
   m_TagString: Untagged
@@ -196,6 +197,21 @@ MonoBehaviour:
   swayAmount: 0.15
   swaySpeed: 2
   gravityPull: 0.5
+--- !u!114 &7882419934339761861
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3239270790798139556}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b04a056f06d980c4f95afa4f38add6b6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FleshFruitSpawner
+  healingFruitPrefab: {fileID: 781647700106264200, guid: 08ec60890a47b5f48b91796b9c35c11c, type: 3}
+  checkInterval: 10
+  spawnChance: 0.01
 --- !u!1 &4785280573277724560
 GameObject:
   m_ObjectHideFlags: 0

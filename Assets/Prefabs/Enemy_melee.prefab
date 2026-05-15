@@ -190,7 +190,7 @@ Transform:
   m_GameObject: {fileID: 893840656811978625}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 1, z: -0, w: 0.0000023543832}
-  m_LocalPosition: {x: 3.5779161, y: 0.5, z: -3.2304223}
+  m_LocalPosition: {x: 0, y: 0.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -239,7 +239,7 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 0.7680073
+  m_Radius: 0.89
   m_Center: {x: 0, y: 1.3878934, z: 0}
 --- !u!54 &7464223538142905503
 Rigidbody:
@@ -289,8 +289,8 @@ AudioSource:
   SpatializePostEffects: 0
   Priority: 128
   DopplerLevel: 1
-  MinDistance: 1
-  MaxDistance: 500
+  MinDistance: 2.803418
+  MaxDistance: 10
   Pan2D: 0
   rolloffMode: 0
   BypassEffects: 0
@@ -382,8 +382,8 @@ MonoBehaviour:
   spawnMoveDuration: 2
   spawnMoveSpeed: 4
   moveSpeed: 2
-  detectionRange: 8
-  chasePlayerChance: 1
+  detectionRange: 20
+  chasePlayerChance: 0.5
 --- !u!114 &382481155892907615
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -399,9 +399,9 @@ MonoBehaviour:
   maxHealth: 3
   organicDropPrefab: {fileID: 4445325646279845987, guid: 5d0ac3bd142f01846a0fa263f500d696, type: 3}
   inorganicDropPrefab: {fileID: 3264628889963936596, guid: 6109bb5a981788b4fa1f98583c816cfc, type: 3}
-  hitSound: {fileID: 8300000, guid: dd371e1dce15fa243b2764c317528111, type: 3}
-  hitVfxPrefab: {fileID: 956774377856875316, guid: 5dcd4947132b70349814f539b881d081, type: 3}
+  hitSound: {fileID: 8300000, guid: 2af46f2894079ef4cb43fd0d65c167a3, type: 3}
   deathSound: {fileID: 8300000, guid: c78e03a1b10acd6448cb84d5457cb2a1, type: 3}
+  deathVfxPrefab: {fileID: 956774377856875316, guid: 41ac95011e108c249a172e3fc832d65f, type: 3}
 --- !u!114 &5205925214997732674
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -418,7 +418,6 @@ MonoBehaviour:
   attackCooldown: 2
   tree: {fileID: 0}
   attackSound: {fileID: 8300000, guid: dd93b770cc9966145ae405b7a6ef854c, type: 3}
-  hitVfxPrefab: {fileID: 919132149155446097, guid: 9938484e328c2dd4b806c2f3b6dcfcad, type: 3}
 --- !u!1 &974100463635971483
 GameObject:
   m_ObjectHideFlags: 0
@@ -1631,7 +1630,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: cc73c96474aa433e8b99209fccd68cdb, type: 2}
+  - {fileID: 2100000, guid: 1f8bafc9b7fb489468c46a2335724aa8, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
