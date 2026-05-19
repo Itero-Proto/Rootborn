@@ -8,18 +8,21 @@ public class EnemyShooter : MonoBehaviour
     public Transform shootPoint;
     public float fireRate = 1.5f;
     public float attackRange = 10f;
-
     [Header("References")]
     public Transform player;
-
     [Header("Audio")]
     public AudioClip shootSound;
+    public AudioClip enemySound;
+    [Range(0f, 1f)]
+    public float enemyVolume = 0.3f;
+    public float minEnemySoundDelay = 4f;
+    public float maxEnemySoundDelay = 10f;
+    private float enemySoundTimer;
 
     private float timer;
     private Animator anim;
     private EnemyController controller;
     private AudioSource audioSource;
-
     private bool isAttacking;
     private float attackFailSafeTimer;
 
@@ -27,6 +30,7 @@ public class EnemyShooter : MonoBehaviour
 
     void Start()
     {
+        enemySoundTimer = Random.Range(minEnemySoundDelay, maxEnemySoundDelay);
         if (player == null)
             player = GameObject.FindGameObjectWithTag("Player")?.transform;
 
@@ -41,7 +45,17 @@ public class EnemyShooter : MonoBehaviour
     {
         if (isGameEnded) return;
         if (player == null || controller == null) return;
+        enemySoundTimer -= Time.deltaTime;
 
+        if (enemySoundTimer <= 0f)
+        {
+            EnemySound();
+
+            enemySoundTimer = Random.Range(
+                minEnemySoundDelay,
+                maxEnemySoundDelay
+            );
+        }
         timer -= Time.deltaTime;
 
         float dist = Vector3.Distance(transform.position, player.position);
@@ -128,5 +142,17 @@ public class EnemyShooter : MonoBehaviour
 
         if (controller != null)
             controller.EndAttacking();
+    }
+    void EnemySound()
+    {
+        if (enemySound == null || audioSource == null)
+            return;
+
+        audioSource.pitch = Random.Range(0.9f, 1.1f);
+
+        audioSource.PlayOneShot(
+            enemySound,
+            enemyVolume
+        );
     }
 }

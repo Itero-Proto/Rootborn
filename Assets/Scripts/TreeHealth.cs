@@ -38,6 +38,7 @@ public class TreeHealth : MonoBehaviour
         UpdateUI();
         if (treeSystem != null)
             treeSystem.StartShake();
+            treeSystem.LoseLevel();
         if (currentHealth <= 0f)
         {
             Die();

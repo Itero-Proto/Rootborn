@@ -630,6 +630,10 @@ MonoBehaviour:
   attackRange: 20
   player: {fileID: 0}
   shootSound: {fileID: 8300000, guid: 646316ecb0fe0a241b388ab5ecf2ae09, type: 3}
+  enemySound: {fileID: 8300000, guid: 054dd30669c4c0343a28ad2a1104aa0b, type: 3}
+  enemyVolume: 0.3
+  minEnemySoundDelay: 4
+  maxEnemySoundDelay: 10
 --- !u!114 &1368793617438336554
 MonoBehaviour:
   m_ObjectHideFlags: 0

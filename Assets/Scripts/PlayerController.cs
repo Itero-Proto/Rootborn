@@ -4,6 +4,8 @@ using UnityEngine.EventSystems;
 [RequireComponent(typeof(Rigidbody))]
 public class PlayerController : MonoBehaviour
 {
+    [Header("Movement VFX")]
+    public Animator dustAnimator;
     public bool inputBlocked;
     public float deathAnimationTime = 2f;
     [Header("VFX")]
@@ -11,7 +13,10 @@ public class PlayerController : MonoBehaviour
     [Header("Movement")]
     public float moveSpeed = 5f;
     public UmbilicalCord cord;
-
+    [Header("Footsteps")]
+    public AudioClip[] footstepSounds;
+    [Range(0f, 1f)]
+    public float footstepVolume = 0.7f;
     [Header("Shooting")]
     public GameObject bulletPrefab;
     public Transform shootPoint;
@@ -47,9 +52,25 @@ public class PlayerController : MonoBehaviour
         Move();
         ClampDistance();
     }
+    public void PlayFootstep()
+    {
+        if (footstepSounds != null &&
+            footstepSounds.Length > 0)
+        {
+            AudioClip clip =
+                footstepSounds[
+                    Random.Range(0, footstepSounds.Length)
+                ];
 
-    // ---------------- MOVEMENT ----------------
+            audioSource.pitch =
+                Random.Range(0.92f, 1.08f);
 
+            audioSource.PlayOneShot(
+                clip,
+                footstepVolume
+            );
+        }
+    }
     void HandleInput()
     {
         float h = Input.GetAxis("Horizontal");
@@ -57,7 +78,6 @@ public class PlayerController : MonoBehaviour
 
         movement = new Vector3(h, 0, v).normalized;
     }
-
     void Move()
     {
         Vector3 velocity = movement * moveSpeed;
@@ -69,10 +89,15 @@ public class PlayerController : MonoBehaviour
             0f,
             velocity.z
         );
+
+        if (dustAnimator != null)
+        {
+            dustAnimator.SetBool(
+                "Moving",
+                movement.magnitude > 0.1f
+            );
+        }
     }
-
-    // ---------------- ROTATION ----------------
-
     void HandleRotation()
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -93,8 +118,6 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    // ---------------- SHOOTING ----------------
-
     void HandleShooting()
     {
         if (inputBlocked) return;
@@ -109,7 +132,6 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    // 👇 ЭТО ВЫЗЫВАЕТ Animation Event
     public void Shoot()
     {
         Instantiate(bulletPrefab, shootPoint.position, shootPoint.rotation);
@@ -120,8 +142,6 @@ public class PlayerController : MonoBehaviour
             audioSource.PlayOneShot(shootSound);
         }
     }
-
-    // ---------------- LIMIT DISTANCE ----------------
 
     void ClampDistance()
     {

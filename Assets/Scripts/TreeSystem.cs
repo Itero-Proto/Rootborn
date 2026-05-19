@@ -210,4 +210,26 @@ public class TreeSystem : MonoBehaviour
 
         transform.localRotation = originalRot;
     }
+    public void LoseLevel()
+    {
+        if (level <= 1)
+            return;
+
+        level--;
+
+        StartShake();
+
+        Vector3 scale = targetScale;
+
+        scale.y *= 0.95f;
+        scale.x *= 0.95f;
+        scale.z *= 0.95f;
+
+        targetScale = scale;
+
+        if (growRoutine != null)
+            StopCoroutine(growRoutine);
+
+        growRoutine = StartCoroutine(SmoothGrow());
+    }
 }

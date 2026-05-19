@@ -378,7 +378,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyController
   player: {fileID: 0}
-  tree: {fileID: 0}
   spawnMoveDuration: 2
   spawnMoveSpeed: 4
   moveSpeed: 2
@@ -416,8 +415,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyMelee
   damage: 1
   attackCooldown: 2
-  tree: {fileID: 0}
   attackSound: {fileID: 8300000, guid: dd93b770cc9966145ae405b7a6ef854c, type: 3}
+  enemySound: {fileID: 8300000, guid: a504f7457744c4a4ebbf6437c3912664, type: 3}
+  enemyVolume: 0.3
+  minEnemySoundDelay: 4
+  maxEnemySoundDelay: 10
 --- !u!1 &974100463635971483
 GameObject:
   m_ObjectHideFlags: 0

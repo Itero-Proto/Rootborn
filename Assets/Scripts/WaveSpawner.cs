@@ -99,7 +99,7 @@ public class WaveSpawner : MonoBehaviour
         // 📝 Показ текста
         if (waveText != null)
         {
-            StartCoroutine(ShowWaveText($"{currentWave}"));
+            StartCoroutine(ShowWaveText($"DAY {currentWave}"));
         }
 
         for (int i = 0; i < enemyCount; i++)
@@ -107,7 +107,7 @@ public class WaveSpawner : MonoBehaviour
             SpawnEnemy();
         }
 
-        Debug.Log($"Wave {currentWave} started | Enemies: {enemyCount}");
+        Debug.Log($"DAY {currentWave} started | Enemies: {enemyCount}");
     }
     IEnumerator ShowWaveText(string text)
     {

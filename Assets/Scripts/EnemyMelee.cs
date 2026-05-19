@@ -4,23 +4,26 @@ public class EnemyMelee : MonoBehaviour
 {
     public float damage = 1f;
     public float attackCooldown = 1f;
-
     private float timer;
-
     private PlayerController player;
     private TreeHealth tree;
-
     private Animator anim;
     private AudioSource audioSource;
     private EnemyController controller;
-
     [Header("Audio")]
     public AudioClip attackSound;
+    public AudioClip enemySound;
+    [Range(0f, 1f)]
+    public float enemyVolume = 0.3f;
+    public float minEnemySoundDelay = 4f;
+    public float maxEnemySoundDelay = 10f;
+    private float enemySoundTimer;
 
     private bool isGameEnded;
 
     void Start()
     {
+        enemySoundTimer = Random.Range(minEnemySoundDelay, maxEnemySoundDelay);
         anim = GetComponentInChildren<Animator>();
         audioSource = GetComponent<AudioSource>();
 
@@ -34,7 +37,17 @@ public class EnemyMelee : MonoBehaviour
     void Update()
     {
         if (isGameEnded) return;
+        enemySoundTimer -= Time.deltaTime;
 
+        if (enemySoundTimer <= 0f)
+        {
+            EnemySound();
+
+            enemySoundTimer = Random.Range(
+                minEnemySoundDelay,
+                maxEnemySoundDelay
+            );
+        }
         timer -= Time.deltaTime;
     }
 
@@ -105,5 +118,17 @@ public class EnemyMelee : MonoBehaviour
 
         if (controller != null)
             controller.EndAttacking();
+    }
+    void EnemySound()
+    {
+        if (enemySound == null || audioSource == null)
+            return;
+
+        audioSource.pitch = Random.Range(0.9f, 1.1f);
+
+        audioSource.PlayOneShot(
+            enemySound,
+            enemyVolume
+        );
     }
 }

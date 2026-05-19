@@ -10,6 +10,10 @@ public class UIManager : MonoBehaviour
 
     void Update()
     {
+        // 🚫 Не даём ESC работать после конца игры
+        if (GameManager.GameEnded)
+            return;
+
         // ESC = toggle пауза
         if (Input.GetKeyDown(KeyCode.Escape))
         {
@@ -19,9 +23,6 @@ public class UIManager : MonoBehaviour
                 PauseGame();
         }
     }
-
-    // ---------------- PAUSE ----------------
-
     public void PauseGame()
     {
         pausePanel.SetActive(true);
@@ -50,7 +51,6 @@ public class UIManager : MonoBehaviour
         Time.timeScale = 1f;
         SceneManager.LoadScene("MainMenu");
     }
-    // ---------------- QUIT ----------------
 
     public void QuitGame()
     {

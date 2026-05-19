@@ -36,12 +36,12 @@ public class GameManager : MonoBehaviour
 
         audioSource = GetComponent<AudioSource>();
     }
-
     public void EndGame(string reason)
     {
         if (gameEnded) return;
 
         gameEnded = true;
+        GameEnded = true;
 
         Time.timeScale = 0f;
 
@@ -50,12 +50,12 @@ public class GameManager : MonoBehaviour
         if (endGamePanel != null)
             endGamePanel.SetActive(true);
     }
-
     public void EndGameCord()
     {
         if (gameEnded) return;
 
         gameEnded = true;
+        GameEnded = true;
 
         Time.timeScale = 0f;
 
