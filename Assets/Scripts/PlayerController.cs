@@ -1,9 +1,11 @@
 ﻿using UnityEngine;
 using UnityEngine.EventSystems;
+using System.Collections;
 
 [RequireComponent(typeof(Rigidbody))]
 public class PlayerController : MonoBehaviour
 {
+    public HintPopup hintPopup;
     [Header("Movement VFX")]
     public Animator dustAnimator;
     public bool inputBlocked;
@@ -38,6 +40,7 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         audioSource = GetComponent<AudioSource>();
         anim = GetComponentInChildren<Animator>();
+        StartCoroutine(ShowStartHint());
     }
 
     void Update()
@@ -51,6 +54,12 @@ public class PlayerController : MonoBehaviour
     {
         Move();
         ClampDistance();
+    }
+    IEnumerator ShowStartHint()
+    {
+        yield return new WaitForSeconds(1f);
+
+        hintPopup.ShowHint("Who am I?");
     }
     public void PlayFootstep()
     {

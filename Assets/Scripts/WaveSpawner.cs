@@ -6,6 +6,7 @@ using TMPro;
 [RequireComponent(typeof(AudioSource))]
 public class WaveSpawner : MonoBehaviour
 {
+    public bool wavesStarted = false;
     [Header("Prefabs")]
     public GameObject meleeEnemyPrefab;
     public GameObject shooterEnemyPrefab;
@@ -15,7 +16,7 @@ public class WaveSpawner : MonoBehaviour
 
     [Header("Wave Settings")]
     public int currentWave = 0;
-    public float timeBetweenWaves = 3f;
+    public float timeBetweenWaves = 5f;
 
     [Header("UI")]
     public TextMeshProUGUI waveText;
@@ -48,6 +49,8 @@ public class WaveSpawner : MonoBehaviour
 
     void Update()
     {
+        if (!wavesStarted)
+            return;
         CleanDeadEnemies();
 
         // ---------------- WAVE END ----------------
@@ -170,5 +173,9 @@ public class WaveSpawner : MonoBehaviour
     void CleanDeadEnemies()
     {
         aliveEnemies.RemoveAll(e => e == null);
+    }
+    public void StartWaves()
+    {
+        wavesStarted = true;
     }
 }

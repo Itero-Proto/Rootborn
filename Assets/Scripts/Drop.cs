@@ -158,7 +158,7 @@ public class Drop : MonoBehaviour
         {
             tree.ReceiveDrop(type);
         }
-
+        
         // 🔊 звук
         if (pickupSound != null)
         {
