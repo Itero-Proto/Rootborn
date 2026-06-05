@@ -6,6 +6,7 @@ using TMPro;
 [RequireComponent(typeof(AudioSource))]
 public class WaveSpawner : MonoBehaviour
 {
+    private HintPopup hintPopup;
     public bool wavesStarted = false;
     [Header("Prefabs")]
     public GameObject meleeEnemyPrefab;
@@ -38,6 +39,7 @@ public class WaveSpawner : MonoBehaviour
 
     void Start()
     {
+        hintPopup = FindAnyObjectByType<HintPopup>();
         player = GameObject.FindGameObjectWithTag("Player").transform;
         audioSource = GetComponent<AudioSource>();
 
@@ -88,6 +90,15 @@ public class WaveSpawner : MonoBehaviour
     void StartNextWave()
     {
         currentWave++;
+        if (hintPopup != null)
+        {
+            if (currentWave == 1)
+                StartCoroutine(ShowWaveHint("hint_first_wave"));
+            if (currentWave == 2)
+                StartCoroutine(ShowWaveHint("hint_second_wave"));
+            if (currentWave == 3)
+                StartCoroutine(ShowWaveHint("hint_third_wave"));
+        }
         waveInProgress = true;
 
         int enemyCount = currentWave;
@@ -111,6 +122,14 @@ public class WaveSpawner : MonoBehaviour
         }
 
         Debug.Log($"DAY {currentWave} started | Enemies: {enemyCount}");
+    }
+    IEnumerator ShowWaveHint(string localizationKey)
+    {
+        yield return new WaitForSeconds(2.5f);
+
+        hintPopup.ShowHint(
+            LocalizationManager.Instance.GetText(localizationKey)
+        );
     }
     IEnumerator ShowWaveText(string text)
     {

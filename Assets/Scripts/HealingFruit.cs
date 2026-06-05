@@ -41,8 +41,22 @@ public class HealingFruit : MonoBehaviour
         player = GameObject.FindGameObjectWithTag("Player")?.transform;
         randomOffset = Random.Range(0f, 100f);
         SetNextShake();
-    }
 
+        if (!PlayerPrefs.HasKey("FirstHealingFruitHint"))
+        {
+            HintPopup hintPopup = FindAnyObjectByType<HintPopup>();
+
+            if (hintPopup != null)
+            {
+                hintPopup.ShowHint(
+                    LocalizationManager.Instance.GetText("hint_healing_fruit")
+                );
+            }
+
+            PlayerPrefs.SetInt("FirstHealingFruitHint", 1);
+            PlayerPrefs.Save();
+        }
+    }
     void Update()
     {
         if (player == null) return;

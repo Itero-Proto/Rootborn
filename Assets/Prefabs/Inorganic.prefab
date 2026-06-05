@@ -12,8 +12,8 @@ GameObject:
   - component: {fileID: 259021965841509799}
   - component: {fileID: 5126965285794766537}
   - component: {fileID: 4146955714464189507}
-  - component: {fileID: 4692901748821589949}
   - component: {fileID: 430192915927868096}
+  - component: {fileID: 4692901748821589949}
   m_Layer: 0
   m_Name: Inorganic
   m_TagString: Untagged
@@ -116,30 +116,6 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &4692901748821589949
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3264628889963936596}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4d9de3e8eea1b204b8f73469a3ab1b59, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Drop
-  type: 1
-  minBounceHeight: 0.1
-  maxBounceHeight: 0.4
-  minBounceSpeed: 2
-  maxBounceSpeed: 6
-  minBounceDelay: 0.5
-  maxBounceDelay: 3
-  attractDistance: 2
-  moveSpeed: 7
-  pickupSound: {fileID: 8300000, guid: 625ed3eda93f1574db9bfdacb800ff80, type: 3}
-  organicPickupVfx: {fileID: 6567708400688204068, guid: add62d05ce530754793aa60025d4a8dc, type: 3}
-  inorganicPickupVfx: {fileID: 6567708400688204068, guid: 4dedd849ac2ff5e409870a563ef3ac00, type: 3}
 --- !u!82 &430192915927868096
 AudioSource:
   m_ObjectHideFlags: 0
@@ -237,3 +213,27 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &4692901748821589949
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3264628889963936596}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d9de3e8eea1b204b8f73469a3ab1b59, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Drop
+  type: 1
+  minBounceHeight: 0.1
+  maxBounceHeight: 0.4
+  minBounceSpeed: 2
+  maxBounceSpeed: 6
+  minBounceDelay: 0.5
+  maxBounceDelay: 3
+  attractDistance: 2
+  moveSpeed: 7
+  pickupSound: {fileID: 8300000, guid: 625ed3eda93f1574db9bfdacb800ff80, type: 3}
+  organicPickupVfx: {fileID: 6567708400688204068, guid: add62d05ce530754793aa60025d4a8dc, type: 3}
+  inorganicPickupVfx: {fileID: 6567708400688204068, guid: 4dedd849ac2ff5e409870a563ef3ac00, type: 3}

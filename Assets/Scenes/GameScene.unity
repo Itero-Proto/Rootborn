@@ -1641,7 +1641,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74eb22470fefa21438ebd6d28998cebd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HintTrigger
-  hintText: Wow! The tree has obviously become bigger!
+  localizationKey: hint_tree_hardens
   showOnlyOnce: 1
 --- !u!65 &322727903
 BoxCollider:
@@ -2890,18 +2890,18 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 507017901}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
-  m_ConstrainProportionsScale: 0
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 123534757}
   m_Father: {fileID: 1512291685}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 1, y: 4}
-  m_SizeDelta: {x: 75, y: 50}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 4}
+  m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &507017903
 MonoBehaviour:
@@ -2965,7 +2965,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 100
   m_TargetDisplay: 0
 --- !u!114 &507017906
 MonoBehaviour:
@@ -2982,7 +2982,7 @@ MonoBehaviour:
   hintText: {fileID: 1775916101}
   canvasGroup: {fileID: 123534760}
   fadeSpeed: 2
-  showTime: 3
+  showTime: 5
 --- !u!1 &525170357
 GameObject:
   m_ObjectHideFlags: 0
@@ -6345,6 +6345,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1310896999}
   - component: {fileID: 1310896998}
+  - component: {fileID: 1310897001}
   - component: {fileID: 1310896997}
   - component: {fileID: 1310897000}
   m_Layer: 0
@@ -6366,7 +6367,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74eb22470fefa21438ebd6d28998cebd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HintTrigger
-  hintText: Sounds of movement in the distance become audible...
+  localizationKey: hint_start_wave
   showOnlyOnce: 1
 --- !u!65 &1310896998
 BoxCollider:
@@ -6418,6 +6419,104 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WaveTrigger
   waveSpawner: {fileID: 909296887}
+  waveTriggerSound: {fileID: 8300000, guid: b107d5bdd7f2d6a49a2204ecad6b8387, type: 3}
+--- !u!82 &1310897001
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1310896996}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_Resource: {fileID: 0}
+  m_PlayOnAwake: 0
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &1331681337
 GameObject:
   m_ObjectHideFlags: 0
@@ -6484,7 +6583,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74eb22470fefa21438ebd6d28998cebd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HintTrigger
-  hintText: Why is he holding me back? I can't tear myself away!
+  localizationKey: hint_cant_leave
   showOnlyOnce: 1
 --- !u!1 &1362490971
 GameObject:
@@ -8154,8 +8253,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: a342a3de0ae5d574e87aa640818d448f, type: 2}
-  m_sharedMaterial: {fileID: 6343040699664056912, guid: a342a3de0ae5d574e87aa640818d448f, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: d148859f1b624824897c9a358265c554, type: 2}
+  m_sharedMaterial: {fileID: 4608387441562647617, guid: d148859f1b624824897c9a358265c554, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -8179,8 +8278,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 10
-  m_fontSizeBase: 10
+  m_fontSize: 7
+  m_fontSizeBase: 7
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -9666,7 +9765,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2048056971}
   - component: {fileID: 2048056970}
-  - component: {fileID: 2048056969}
+  - component: {fileID: 2048056972}
   m_Layer: 0
   m_Name: HintZoneOrganic
   m_TagString: Untagged
@@ -9674,20 +9773,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &2048056969
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2048056968}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 74eb22470fefa21438ebd6d28998cebd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::HintTrigger
-  hintText: The tree is changing...
-  showOnlyOnce: 1
 --- !u!65 &2048056970
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -9724,6 +9809,20 @@ Transform:
   m_Children: []
   m_Father: {fileID: 39247453394466196}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2048056972
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2048056968}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 74eb22470fefa21438ebd6d28998cebd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HintTrigger
+  localizationKey: hint_tree_changing
+  showOnlyOnce: 1
 --- !u!1 &2132589643
 GameObject:
   m_ObjectHideFlags: 0
@@ -10488,7 +10587,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 151acc3026ff6a14e85571facc2a32e2, type: 2}
+  - {fileID: 2100000, guid: d216d468d94780c42800033144fa0e30, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

@@ -2,8 +2,7 @@ using UnityEngine;
 
 public class HintTrigger : MonoBehaviour
 {
-    [TextArea]
-    public string hintText;
+    public string localizationKey;
 
     public bool showOnlyOnce = true;
 
@@ -28,7 +27,9 @@ public class HintTrigger : MonoBehaviour
 
         if (hintPopup != null)
         {
-            hintPopup.ShowHint(hintText);
+            hintPopup.ShowHint(
+                LocalizationManager.Instance.GetText(localizationKey)
+            );
         }
     }
 }

@@ -2,6 +2,7 @@
 
 public class Drop : MonoBehaviour
 {
+    private HintPopup hintPopup;
     [Header("Core")]
     public DropType type;
     private TreeSystem tree;
@@ -38,6 +39,7 @@ public class Drop : MonoBehaviour
 
     void Start()
     {
+        hintPopup = FindAnyObjectByType<HintPopup>();
         startPos = transform.position;
         SetNextBounceDelay();
         player = GameObject.FindGameObjectWithTag("Player")?.transform;
@@ -158,7 +160,27 @@ public class Drop : MonoBehaviour
         {
             tree.ReceiveDrop(type);
         }
-        
+
+        if (hintPopup != null)
+        {
+            // Первый раз гарантированно
+            if (!PlayerPrefs.HasKey("FirstRemainsHint"))
+            {
+                hintPopup.ShowHint(
+                    LocalizationManager.Instance.GetText("hint_first_remains")
+                );
+
+                PlayerPrefs.SetInt("FirstRemainsHint", 1);
+                PlayerPrefs.Save();
+            }
+            // Потом иногда
+            else if (Random.value < 0.15f)
+            {
+                hintPopup.ShowHint(
+                    LocalizationManager.Instance.GetText("hint_first_remains")
+                );
+            }
+        }
         // 🔊 звук
         if (pickupSound != null)
         {

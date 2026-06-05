@@ -1,6 +1,6 @@
-using System.Collections;
 using TMPro;
 using UnityEngine;
+using System.Collections;
 
 public class HintPopup : MonoBehaviour
 {
@@ -8,7 +8,7 @@ public class HintPopup : MonoBehaviour
     public CanvasGroup canvasGroup;
 
     public float fadeSpeed = 2f;
-    public float showTime = 3f;
+    public float showTime = 5f;
 
     private Coroutine currentRoutine;
 

@@ -4,6 +4,9 @@ using System.Collections;
 
 public class TreeHealth : MonoBehaviour
 {
+    private bool firstHealHintShown = false;
+    private HintPopup hintPopup;
+    private bool firstDamageHintShown = false;
     [Header("UI")]
     public Image healthCircle;
     public TreeSystem treeSystem;
@@ -19,12 +22,24 @@ public class TreeHealth : MonoBehaviour
         currentHealth = maxHealth;
         UpdateUI();
         audioSource = GetComponent<AudioSource>();
+        hintPopup = FindAnyObjectByType<HintPopup>();
     }
 
     public void TakeDamage(float damage)
     {
         currentHealth -= damage;
         currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
+        if (!firstDamageHintShown)
+        {
+            firstDamageHintShown = true;
+
+            if (hintPopup != null)
+            {
+                hintPopup.ShowHint(
+                    LocalizationManager.Instance.GetText("hint_tree_damaged")
+                );
+            }
+        }
         // 🔊 звук
         if (takeDamageSound != null && audioSource != null)
         {
@@ -48,7 +63,17 @@ public class TreeHealth : MonoBehaviour
     {
         currentHealth += amount;
         currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
+        if (!firstHealHintShown)
+        {
+            firstHealHintShown = true;
 
+            if (hintPopup != null)
+            {
+                hintPopup.ShowHint(
+                    LocalizationManager.Instance.GetText("hint_tree_healed")
+                );
+            }
+        }
         UpdateUI();
 
         if (healPulseRoutine != null)

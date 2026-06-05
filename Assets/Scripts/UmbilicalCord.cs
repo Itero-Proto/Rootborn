@@ -4,6 +4,8 @@ using System.Collections;
 [RequireComponent(typeof(LineRenderer))]
 public class UmbilicalCord : MonoBehaviour
 {
+    private HintPopup hintPopup;
+    private bool firstLengthIncreaseShown = false;
     public Transform tree;
     public Transform player;
     private LineRenderer line;
@@ -25,6 +27,7 @@ public class UmbilicalCord : MonoBehaviour
         line = GetComponent<LineRenderer>();
         line.positionCount = segments;
         currentMaxDistance = baseMaxDistance;
+        hintPopup = FindAnyObjectByType<HintPopup>();
     }
     void Update()
     {
@@ -44,8 +47,18 @@ public class UmbilicalCord : MonoBehaviour
     {
         currentMaxDistance += amount;
 
-    }
+        if (!firstLengthIncreaseShown)
+        {
+            firstLengthIncreaseShown = true;
 
+            if (hintPopup != null)
+            {
+                hintPopup.ShowHint(
+                    LocalizationManager.Instance.GetText("hint_cord_growth")
+                );
+            }
+        }
+    }
     void DrawCord()
     {
         for (int i = 0; i < segments; i++)

@@ -5,6 +5,7 @@ using System.Collections;
 [RequireComponent(typeof(Rigidbody))]
 public class PlayerController : MonoBehaviour
 {
+    private bool firstShotHintShown = false;
     public HintPopup hintPopup;
     [Header("Movement VFX")]
     public Animator dustAnimator;
@@ -59,7 +60,8 @@ public class PlayerController : MonoBehaviour
     {
         yield return new WaitForSeconds(1f);
 
-        hintPopup.ShowHint("Who am I?");
+        hintPopup.ShowHint(
+        LocalizationManager.Instance.GetText("hint_who_am_i"));
     }
     public void PlayFootstep()
     {
@@ -140,10 +142,18 @@ public class PlayerController : MonoBehaviour
             fireTimer = fireRate;
         }
     }
-
     public void Shoot()
     {
         Instantiate(bulletPrefab, shootPoint.position, shootPoint.rotation);
+
+        if (!firstShotHintShown)
+        {
+            firstShotHintShown = true;
+
+            hintPopup.ShowHint(
+                LocalizationManager.Instance.GetText("hint_first_shot")
+            );
+        }
 
         if (shootSound != null)
         {
@@ -151,7 +161,6 @@ public class PlayerController : MonoBehaviour
             audioSource.PlayOneShot(shootSound);
         }
     }
-
     void ClampDistance()
     {
         if (cord == null) return;

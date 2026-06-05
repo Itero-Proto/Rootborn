@@ -4,6 +4,8 @@ using UnityEngine.UI;
 
 public class TreeSystem : MonoBehaviour
 {
+    private HintPopup hintPopup;
+    private bool organicTwoHintShown = false;
     private Coroutine shakeRoutine;
     private Vector3 targetScale;
     private Coroutine growRoutine;
@@ -31,7 +33,7 @@ public class TreeSystem : MonoBehaviour
             treeMaterial = treeRenderer.material;
 
         targetScale = transform.localScale;
-
+        hintPopup = FindAnyObjectByType<HintPopup>();
     }
     void Update()
     {
@@ -52,6 +54,18 @@ public class TreeSystem : MonoBehaviour
         {
             organic++;
             StartCoroutine(OrganicPulse());
+
+            if (!organicTwoHintShown && organic >= 2)
+            {
+                organicTwoHintShown = true;
+
+                if (hintPopup != null)
+                {
+                    hintPopup.ShowHint(
+                        LocalizationManager.Instance.GetText("hint_organic_two")
+                    );
+                }
+            }
         }
         else
         {
